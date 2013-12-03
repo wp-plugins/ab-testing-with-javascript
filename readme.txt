@@ -26,9 +26,9 @@ You can help to contribute to this project on github.com @ [Wordpress AB Testing
 
 == Screenshots ==
 
-1.	Enter test code and parameters into wp-admin interface screenshot-1.png
+1.	Enter test code and parameters into wp-admin interface
 
-2.	Test data and results are sent to your google analtyics account. Example: Testing Black or Dark Grey headline colors screenshot-2.png
+2.	Test data and results are sent to your google analtyics account. Example: Testing Black or Dark Grey headline colors
 
 == Requirements ==
 *	General Wordpress Installation
