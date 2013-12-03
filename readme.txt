@@ -29,7 +29,7 @@ Enter test code and parameters into wp-admin interface.
 
 Test data and results are sent to your google analtyics account.
 Example: Testing Black or Dark Grey headline colors
-`/tags/1.0/screenshots/analytics.jpg`
+`/tags/1.0/analytics.jpg`
 
 == Screenshots ==
 
@@ -38,7 +38,7 @@ Enter test code and parameters into wp-admin interface.
 
 Test data and results are sent to your google analtyics account.
 Example: Testing Black or Dark Grey headline colors
-`/tags/1.0/screenshots/analytics.jpg`
+`/tags/1.0/analytics.jpg`
 
 == Requirements ==
 *	General Wordpress Installation
