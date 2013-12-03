@@ -1,0 +1,114 @@
+div.pad-0 {
+	padding: 0 !important;
+}
+
+input,
+p {
+	margin: 0 !important;
+}
+
+label {
+	font-size: 12px;
+}
+
+#test_name {
+	margin-bottom: 10px !important;
+}
+
+p.test_name {
+	font-weight: bold;
+}
+
+div.content-wrapper {
+	margin: 20px 15px;
+}
+
+div.test-data {
+	border: solid 1px #DDD;
+	display: none;
+	margin: 10px 0;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+div.version_data,
+#button_wrap {
+	border-top: solid 1px #DDD;
+	margin: 10px 0 !important;
+	padding-top: 10px;
+}
+
+div.version_data p {
+	font-size: 14px;
+	font-weight: bold;
+	margin-bottom: 20px !important;
+}
+
+p.error {
+	color: #D22;
+	display: none;
+	font-weight: normal;
+	margin: 5px 0 !important;
+}
+
+textarea.code_input {
+	height: 100px;
+}
+
+button.delete_ver {
+	font-size: 10px;
+	font-weight: normal;
+	margin: 5px 0 0 0;
+}
+
+#test_table input[type="checkbox"] {
+	display: inline-block;
+	float: left;
+	margin: -1px 5px 0 0 !important;
+}
+
+div.table-header {
+	margin-top: 20px !important;
+}
+
+#test_table p {
+	font-size: 14px;
+}
+
+div.table-header p {
+	font-size: 12px;
+	font-weight: bold;
+}
+
+textarea.version_code {
+	height: 25px;
+	min-height: 20px;
+	margin: 0;
+}
+
+div.cell_wrapper {
+	border: solid 1px #DDD;
+	margin-top: 20px;
+	padding-bottom: 10px;
+}
+
+div.cell-header {
+	background: #F4F4F4;
+	border-bottom: solid 1px #DDD;
+	padding-top: 10px;
+}
+
+div.version_wrap {
+	margin-top: 10px !important;
+}
+
+button.trash_this {
+	font-weight: normal;
+	margin: 0;
+	padding: 3px 6px;
+	top: -5px;
+}
+
+ label.set_winner {
+ 	margin: 5px 0 0 0;
+ }
