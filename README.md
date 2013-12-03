@@ -21,11 +21,13 @@ A plugin for A/B split-testing HTML/CSS/DOM elements with javascript.  Wordpress
 - Cache control of file `js/ab.js`. This file is rewritten and updated often, so make sure you can update cached versions of this file.
 
 #### Installation
-- Copy the files from this repo to your server directory `/wp-content/plugins/`
-- In wp-admin, navigate to Plugins and activate 'A/B Split Testing'
-- set server `/js/` directory permissions to 0755 or 0775. Directory must be writable by PHP
-- set server `/js/ab.js` file permissions to 0755 or 0775. File must be writable by PHP
-- Test info/data is saved in the wordpress table `wp_options` with the prefix `_ABTEST_`
+*	Copy the files from this repo to your server directory `/wp-content/plugins/`
+*	In wp-admin, navigate to Plugins and activate 'A/B Split Testing'
+*	set server `/js/` directory permissions to 0755 or 0775. Directory must be writable by PHP
+*	set server `/js/ab.js` file permissions to 0755 or 0775. File must be writable by PHP
+*	link to the file `/js/ab.js` in the header of every page on your website
+`<script src="http://example.com/wp-content/plugins/split-testing/js/ab.js"></script>`
+*	Make sure to clear any cache for the `/js/ab.js` file after starting, updating, or stopping tests.
 
 #### Javascript
 - After your first test is created, you must globally link to the plugin file `js/ab.js` in your wordpress theme.
