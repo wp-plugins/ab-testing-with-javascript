@@ -25,20 +25,20 @@ A plugin for A/B split-testing HTML/CSS/DOM elements with javascript.  Wordpress
 You can help to contribute to this project on github.com @ [Wordpress AB Testing](https://github.com/etan-nitram/split-testing) 
 
 Enter test code and parameters into wp-admin interface.
-`/tags/1.0/newtest.jpg`
+`screenshot-1.jpg`
 
 Test data and results are sent to your google analtyics account.
 Example: Testing Black or Dark Grey headline colors
-`/tags/1.0/analytics.jpg`
+`screenshot-2.jpg`
 
 == Screenshots ==
 
 Enter test code and parameters into wp-admin interface.
-`/tags/1.0/newtest.jpg`
+`screenshot-1.jpg`
 
 Test data and results are sent to your google analtyics account.
 Example: Testing Black or Dark Grey headline colors
-`/tags/1.0/analytics.jpg`
+`screenshot-2.jpg`
 
 == Requirements ==
 *	General Wordpress Installation
