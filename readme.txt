@@ -14,6 +14,8 @@ AB test website content with javascript (no PHP scripting). Run AB experiments w
 
 A plugin for A/B split-testing HTML/CSS/DOM elements with javascript.  Wordpress, JQuery, and Google Analytics are required.
 
+Important: This plugin is probably best suited for developers with advanced JavaScript and theme development skills.  It’s not overly complex, but if you’re not experienced with manipulating the DOM with JS, you probably won’t find this plugin useful.
+
 *	Test changes to your site with Javascript
 *	Run up to 5 tests simultaneously (per visitor session)
 *	Unlimited versions per test
