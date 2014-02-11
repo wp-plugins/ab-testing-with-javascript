@@ -33,6 +33,9 @@ class af_split_test_ajax_requests {
 		add_action( 'wp_ajax_set_trash_test', array( $this, 'set_trash_test' ) );
 		add_action( 'wp_ajax_set_test_active', array( $this, 'set_test_active' ) );
 		add_action( 'wp_ajax_set_test_stop', array( $this, 'set_test_stop' ) );
+		add_action( 'wp_ajax_get_test_options', array( $this, 'get_test_options' ) );
+		add_action( 'wp_ajax_set_test_option_value', array( $this, 'set_test_option_value' ) );
+		add_action( 'wp_ajax_save_test_settings', array( $this, 'save_test_settings' ) );
 	}
 
 	/*
@@ -242,7 +245,6 @@ class af_split_test_ajax_requests {
         die('');
 	}
 
-
 	/*
 		set test to stop which ends test, test will still show in admin
 		@param post string test name
@@ -285,6 +287,131 @@ class af_split_test_ajax_requests {
 	}
 
 	/*
+		get all test settings set in _ABTEST_test_options
+		@return json array all option
+	*/
+	public function get_test_options() {
+
+		if ( ! check_ajax_referer( ABST_SPLIT_TEST_NONCE, 'nonce' ) )
+			die('');
+
+		$settings = $this->query_select_test_settings();
+
+		$settings = json_encode( $settings );
+
+		header('Content-type: application/json');
+		echo $settings;
+
+		// Always use die() on ajax actions
+        die('');
+	}
+
+	/*
+		set a test option value in _ABTEST_test_options
+		#1 select all settings
+		#2 update exsiting option or add new option
+		@raram post optionName
+		@raram post optionValue
+		@return json array all settings
+	*/
+	public function set_test_option_value() {
+
+		if ( ! check_ajax_referer( ABST_SPLIT_TEST_NONCE, 'nonce' ) )
+			die('');
+
+		$optionName = isset( $_POST['optionName'] ) ? $_POST['optionName'] : FALSE;
+		$optionValue = isset( $_POST['optionValue'] ) ? $_POST['optionValue'] : FALSE;
+
+		if ( $optionName === FALSE || $optionValue === FALSE ) {
+			die('');
+		}
+
+		$settings = $this->query_select_test_settings();
+		$settings = $this->set_test_options( $settings, $optionName, $optionValue );
+		
+		$settings = json_encode( $settings );
+
+		update_option( $this->option_prefix . 'test_options', $settings );
+
+		header('Content-type: application/json');
+		echo $settings;
+
+		// Always use die() on ajax actions
+        die('');
+	}
+
+	/*
+		all test settings have been saved to db by this point.
+		this "save" just selects and writes the settings to a function in the ab.js file
+		@raram post optionName
+		@raram post optionValue
+		@return json array all options
+	*/
+	public function save_test_settings() {
+
+		if ( ! check_ajax_referer( ABST_SPLIT_TEST_NONCE, 'nonce' ) )
+			die('');
+
+		$this->create_production_ab_js_file();
+		
+		header('Content-type: application/json');
+		echo $options;
+
+		// Always use die() on ajax actions
+        die('');
+	}
+
+	/*
+		select test options which are stored in _ABTEST_test_options
+		@param
+		@return
+	*/
+	private function query_select_test_settings() {
+
+		$options = $this->wpdb->get_results(
+			$this->wpdb->prepare(
+				"
+					SELECT option_value
+					FROM wp_options
+					WHERE option_name = %s
+				",
+				$this->option_prefix . 'test_options'
+			),
+			ARRAY_A
+		);
+
+		if ( count( $options ) === 1 )
+			return json_decode( $options[0]['option_value'], TRUE );
+
+		return array();
+	}
+
+	/*
+		add or update options in array
+		@param array existing options
+		@param string
+		@param string
+		@return array
+	*/
+	private function set_test_options( $options, $optionName, $optionValue ) {
+
+		$option_found = FALSE;
+		
+		foreach ( $options as $key => $value ) {
+		
+			if ( $key == $optionName ) {
+				$options[$key] = $optionValue;
+				$option_found = TRUE;
+			}
+		}
+
+		if ( $option_found === FALSE )
+			$options[$optionName] = $optionValue;
+
+		return $options;
+	}
+
+	/*
 		upon update of set_test_active(), set_version_winner(), set_trash_test(), or set_test_stop()
 		this function is run, which gets test data from wp_options, prepares if for output, and prints
 		the output to js/ab.js.
@@ -299,7 +426,8 @@ class af_split_test_ajax_requests {
 		$tests = $this->remove_meta_items( $tests );
 		$tests = $this->set_active_stop_boolean( $tests );
 		$tests = $this->tests_json_output( $tests );
-		$this->create_production_js_file( $tests );
+		$settings = json_encode( $this->query_select_test_settings() );
+		$this->create_production_js_file( $tests, $settings );
 	}
 
 	/*
@@ -411,7 +539,7 @@ class af_split_test_ajax_requests {
 		@param string json test data
 		@return null
 	*/
-	private function create_production_js_file( $tests ) {
+	private function create_production_js_file( $tests, $settings ) {
 
 		$js_dir = $this->get_plugin_js_directory( $this->directory_js );
 
@@ -425,7 +553,7 @@ class af_split_test_ajax_requests {
 		if ( ! is_file( $js_print_file ) )
 			return;
 
-		$this->merge_base_print_file( $js_base_file, $js_print_file, $tests );
+		$this->merge_base_print_file( $js_base_file, $js_print_file, $tests, $settings );
 	}
 
 	private function get_plugin_js_directory( $js_dir ) {
@@ -444,9 +572,11 @@ class af_split_test_ajax_requests {
 		@param string json test data
 		@return null
 	*/
-	private function merge_base_print_file( $js_base_file, $js_print_file, $tests ) {
+	private function merge_base_print_file( $js_base_file, $js_print_file, $tests, $settings ) {
 
-		$js = "try { ab.init('";
+		$js = "try { ";
+		$js .= "ab.settings('" . $settings . "');";
+		$js .= "ab.init('";
 		$js .= $tests;
 		$js .= "') } catch (e) {} });";
 

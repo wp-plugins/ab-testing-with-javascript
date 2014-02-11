@@ -19,6 +19,23 @@ p.test_name {
 	font-weight: bold;
 }
 
+#settings_wrap {
+	border: solid 1px #DDD;
+	display: none;
+	margin: 1em 0 2em 0;
+	padding-bottom: 1em;
+}
+
+#settings_wrap p {
+	margin-top: 1em !important;
+}
+
+#settings_wrap hr {
+	border: none;
+	border-top: solid 1px #DDD;
+	margin: 1em 0;
+}
+
 div.content-wrapper {
 	margin: 20px 15px;
 }

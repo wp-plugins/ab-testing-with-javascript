@@ -41,6 +41,15 @@ var ab = {
 		this.setTestCookie(this.cookyName, this.idVers);
 	},
 
+	settings: function(obj) {
+		obj = $.parseJSON(obj);
+		for (o in obj) {
+			if (o != '' && obj[o] != '') {
+				ab[o] = obj[o];
+			}
+		}
+	},
+
 	applyTestIndex: function(tst) {
 		for (var i = 0; i < tst.length; i++) {
 			tst[i].tstIndex = i + 1;
@@ -137,7 +146,7 @@ var ab = {
 
 				// check if cooky has existing test id and version
 				if (vers[i][0] === cooky[j][0])
-					idFound = true
+					idFound = true;
 
 				// if id & version found, keep current stored version
 				if (idFound) {
@@ -192,7 +201,14 @@ var ab = {
 	},
 
 	fireAnalytics: function(tst, vers) {
-		_gaq.push(['_setCustomVar', tst.tstIndex, 'AB: ' + tst.test_name, tst.versNames[vers - 1], 2]);
-		_gaq.push(['_trackEvent', 'AB Testing', 'Test View', tst.test_name + ' - ' + tst.versNames[vers - 1]]);
+		var ga_dim = {};
+		if (typeof _gaq !== 'undefined') {
+			_gaq.push(['_setCustomVar', tst.tstIndex, 'AB: ' + tst.test_name, tst.versNames[vers - 1], 2]);
+			_gaq.push(['_trackEvent', 'AB Testing', 'Test View', tst.test_name + ' - ' + tst.versNames[vers - 1]]);
+
+		} else if (typeof ga === 'function' && typeof ab.ga_dim !== 'undefined'){
+			ga('set', ab.ga_dim, tst.test_name + ' - ' + tst.versNames[vers - 1]);
+			ga('send', 'event', 'AB Testing', 'Test View');
+		}
 	}
 };

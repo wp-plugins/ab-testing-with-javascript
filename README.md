@@ -2,7 +2,7 @@
 
 #### Description
 
-A plugin for A/B split-testing HTML/CSS/DOM elements with javascript.  Wordpress, JQuery, and Google Analytics are required.
+A plugin for A/B split-testing HTML/CSS/DOM elements with javascript.  Wordpress, JQuery, and Google Analytics are required to run experiments.
 
 Important: This plugin is probably best suited for developers with advanced JavaScript and theme development skills.  It’s not overly complex, but if you’re not experienced with manipulating the DOM with JS, you probably won’t find this plugin useful.
 
@@ -10,9 +10,17 @@ Important: This plugin is probably best suited for developers with advanced Java
 - Run up to 5 tests simultaneously (per visitor session)
 - Unlimited versions per test
 - Test info is saved in cookies so returning visitors see the same version of your site
-- Test data is sent to your google analytics account as custom variables
+- Experiment data is sent to your google analytics account as custom variables
 - No AJAX. Test info and javascript code are served from static `ab.js` file
-- Test info/data is saved in the wordpress table `wp_options`
+- Experiment info/data is saved in the wordpress table `wp_options`
+
+Supports both versions of Google Analytics, old "_gaq" and new Universal "ga()"
+
+If you have [Universal Analytics](https://support.google.com/analytics/answer/2790010?hl=en) deployed on your site, you must provide a [Custom Dimension key](https://support.google.com/analytics/answer/2790010?hl=en). [Follow these instructions](https://support.google.com/analytics/answer/2709829?hl=en&topic=2709827&ctx=topic) to setup a custom dimension. Then, eadd the dimension to the plugin settings.
+
+Also, Universal Analytics users must use this (Custom Report)[https://www.google.com/analytics/web/template?uid=-O_F9EH4Qpil1mSt9l6U8A] to view test results (Universal Analytics only).
+
+You can download the plugin directly from wordpress.org @ [AB Testing with Javascript](http://wordpress.org/plugins/ab-testing-with-javascript/)
 
 #### Requirements
 - General Wordpress Installation
@@ -23,13 +31,15 @@ Important: This plugin is probably best suited for developers with advanced Java
 - Cache control of file `js/ab.js`. This file is rewritten and updated often, so make sure you can update cached versions of this file.
 
 #### Installation
-*	Copy the files from this repo to your server directory `/wp-content/plugins/`
-*	In wp-admin, navigate to Plugins and activate 'A/B Split Testing'
-*	set server `/js/` directory permissions to 0755 or 0775. Directory must be writable by PHP
-*	set server `/js/ab.js` file permissions to 0755 or 0775. File must be writable by PHP
-*	link to the file `/js/ab.js` in the header of every page on your website
+- Copy the files from this repo to your server directory `/wp-content/plugins/`
+- In wp-admin, navigate to Plugins and activate 'A/B Split Testing'
+- set server `/js/` directory permissions to 0755 or 0775. Directory must be writable by PHP
+- set server `/js/ab.js` file permissions to 0755 or 0775. File must be writable by PHP
+-	link to the file `/js/ab.js` in the header of every page on your website
 `<script src="http://example.com/wp-content/plugins/split-testing/js/ab.js"></script>`
-*	Make sure to clear any cache for the `/js/ab.js` file after starting, updating, or stopping tests.
+-	Make sure to clear any cache for the `/js/ab.js` file after starting, updating, or stopping tests.
+
+You can download the plugin directly from wordpress.org @ [AB Testing with Javascript](http://wordpress.org/plugins/ab-testing-with-javascript/)
 
 #### Javascript
 - After your first test is created, you must globally link to the plugin file `js/ab.js` in your wordpress theme.
@@ -47,6 +57,14 @@ Important: This plugin is probably best suited for developers with advanced Java
 - Event sent `_gaq.push(['_trackEvent', 'AB Testing', 'Test View', 'Test Name & Version']);`
 - Goals: It is up to you, the webmaster or analytics admin, to set the test goals in your analytics admin settings.
 - Do not run more than 5 A/B tests per visitor session. Otherwise analytics data will be overwritten or lost
+
+Supports both versions of Google Analytics, old "_gaq" and new Universal "ga()"
+
+If you have [Universal Analytics](https://support.google.com/analytics/answer/2790010?hl=en) deployed on your site, you must provide a [Custom Dimension key](https://support.google.com/analytics/answer/2790010?hl=en). [Follow these instructions](https://support.google.com/analytics/answer/2709829?hl=en&topic=2709827&ctx=topic) to setup a custom dimension. Then, eadd the dimension to the plugin settings.
+
+Also, Universal Analytics users must use this (Custom Report)[https://www.google.com/analytics/web/template?uid=-O_F9EH4Qpil1mSt9l6U8A] to view test results (Universal Analytics only).
+
+![Custom Variables](/screenshots/analytics.jpg)
 
 Here's further reading about Google Analytics [Custom Variables](https://developers.google.com/analytics/devguides/collection/gajs/gaTrackingCustomVariables), [Analytics Events](https://developers.google.com/analytics/devguides/collection/gajs/eventTrackerGuide), and [Analytics Goals](https://support.google.com/analytics/answer/1032415?hl=en).
 
@@ -101,6 +119,7 @@ if ( $('button.test_button').length > 0 ) {
 	analytics = true;
 }
 ```
+![New Test Admin](/screenshots/newtest.jpg)
 
 #### analytics = true;
 - do not override or re-declare the `analytics` variable. It must be available to the `ab.js` file scope and set to true.

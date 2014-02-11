@@ -2,7 +2,28 @@
 
 	<div class="row">
 		<div class="small-12 columns">
-			<button id="new_test" class="tiny">Create New Test</button>
+			<button id="new_test" class="tiny">Create New Test</button><button id="app_settings" class="tiny">Settings</button>
+		</div>
+	</div>
+
+	<div id="settings_wrap" class="row">
+		<div class="small-12 columns">
+			<div class="row">
+				<div class="small-12 columns">
+					<p><strong>Universal Analytics</strong></p>
+					<p>If you have <a href="https://support.google.com/analytics/answer/2790010?hl=en" target="_blank">Universal Analytics</a> deployed on your site, you must provide a <a href="https://support.google.com/analytics/answer/2709829?hl=en&topic=2709827&ctx=topic" target="_blank">Custom Dimension</a> key. <a href="https://support.google.com/analytics/answer/2709829?hl=en&topic=2709827&ctx=topic" target="_blank">Follow these instructions</a> to setup a custom dimension.</p>
+					<p>Use this <a href="https://www.google.com/analytics/web/template?uid=cpEA-yiCTvuTZpXqsrUThQ" target="_blank">Custom Report</a> to view test results (Universal Analytics only).</p>
+					<p>You only need 1 dimension for this plug-in.</p>
+					<p>Name your dimension "<strong>AB Testing</strong>", set the scope to "<strong>Session</strong>," activate the dimension, and enter the the dimension here <input style="margin-top:5px;width:250px;" id="custdim" type="text" placeholder="dimension3"></p>
+					<p id="gadimerr" class="error">Your dimension value should be a string like dimension[0-200]. example: dimension14</p>
+				</div>
+			</div>
+			<hr>
+			<div class="row">
+				<div class="small-12 columns text-right">
+					<button id="savsettings" class="small">Save Settings</button>
+				</div>
+			</div>
 		</div>
 	</div>
 

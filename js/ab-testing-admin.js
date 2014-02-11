@@ -4,6 +4,7 @@ var $ = jQuery,
 	ab = {
 
 	newTest: $('#new_test'),
+	appSettings: $('#app_settings'),
 	closeTest: $('#close_new'),
 	testData: $('#test_data'),
 	newData: $('#test_data div.new_data'),
@@ -28,6 +29,7 @@ var $ = jQuery,
 		testName: true
 	},
 	winnerSet: [],
+	settings_error: false,
 
 	init: function() {
 		this.initAllTests();
@@ -38,7 +40,7 @@ var $ = jQuery,
 		this.versWrap = this.testTable.find('div.version_wrap').clone();
 		$('div.cell_wrapper').remove();
 		// clone html for test table and remove
-
+		this.abTestSettings();
 		this.newTestClick();
 		this.closeTestClick();
 	},
@@ -49,7 +51,6 @@ var $ = jQuery,
 	},
 
 	getAllTests: function() {
-
 		ab.ajaxRequest({
 			url: pageLocalData.ajaxurl,
 			data: {
@@ -80,6 +81,110 @@ var $ = jQuery,
 		this.setActiveClick(tst);
 		this.setStopInput(tst);
 		this.setStopClick(tst);
+	},
+
+	abTestSettings: function() {
+		this.getTestSettings();
+		this.saveSettings();
+
+		this.appSettings.click(function() {
+			var wrap = $('#settings_wrap');
+			if (wrap.css('display') == 'block') {
+				wrap.css('display', 'none');
+			} else {
+				wrap.css('display', 'block');
+			}
+		});
+	},
+
+	getTestSettings: function() {
+		ab.ajaxRequest({
+			url: pageLocalData.ajaxurl,
+			data: {
+				action: 'get_test_options',
+				nonce: pageLocalData.nonce
+			},
+			callBack: ab.getSettingsCallback,
+			dataType: 'json'
+		});
+	},
+
+	getSettingsCallback: function(opts) {
+		ab.test_settings = opts;
+		ab.dimensionInput(opts);
+	},
+
+	/*
+		populate and apply change bind to analytics custom dimensions input
+		@param array
+		@return null
+	*/
+	dimensionInput: function(opts) {
+		var custdim = $('#custdim'),
+			gadimerr = $('#gadimerr');
+
+		for (o in opts) {
+			if (o == 'ga_dim') {
+				custdim.val(opts[o]);
+			}
+		}
+
+		custdim.change(function() {
+			var self = $(this),
+				val = self.val();
+
+			if (ab.ga_dimension_valid(val)) {
+				gadimerr.css('display', 'none');
+				ab.settings_error = false;
+				ab.ajaxRequest({
+					url: pageLocalData.ajaxurl,
+					data: {
+						action: 'set_test_option_value',
+						optionName: 'ga_dim',
+						optionValue: val,
+						nonce: pageLocalData.nonce
+					},
+					callBack: ab.getSettingsCallback,
+					dataType: 'json'
+				});
+			} else {
+				gadimerr.css('display', 'block');
+				ab.settings_error = true;
+			}
+		});
+	},
+
+	/*
+		check if analytics custom dimension is in valid form
+		must equal "dimension[0-200]"
+		@param string
+		@return boolean
+	*/
+	ga_dimension_valid: function(val) {
+		return (val.match(/dimension[0-9]{1,}/) === null) ? false : true;
+	},
+
+	/*
+		bind click envent to save settings button and send ajax request
+		to update testing script
+		@param null
+		@return null
+	*/
+	saveSettings: function() {
+		var savsettings = $('#savsettings');
+
+		savsettings.click(function() {
+			$('#settings_wrap').css('display', 'none');
+			ab.ajaxRequest({
+				url: pageLocalData.ajaxurl,
+				data: {
+					action: 'save_test_settings',
+					nonce: pageLocalData.nonce
+				},
+				callBack: ab.getSettingsCallback,
+				dataType: 'json'
+			});
+		});
 	},
 
 	/*
